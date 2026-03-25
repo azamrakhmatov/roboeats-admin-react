@@ -15,7 +15,7 @@ const StrengthBar = ({ score, colors, label }: StrengthBarProps) => {
             key={i}
             className={cn(
               "h-1 flex-1 rounded-full transition-all duration-300",
-              i < score ? colors[score - 1] : "bg-muted"
+              i < score ? colors[score - 1] : "bg-muted",
             )}
           />
         ))}

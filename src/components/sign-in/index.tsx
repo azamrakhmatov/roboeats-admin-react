@@ -6,8 +6,6 @@ import { cn } from "@/lib/utils";
 import { useSignInFeature } from "./feature";
 import StrengthBar from "./customs/strength-bar";
 
-
-
 const SignIn = () => {
   const {
     formik,
@@ -20,15 +18,13 @@ const SignIn = () => {
   } = useSignInFeature();
 
   return (
-    
-    <div className="min-h-[calc(100vh-52px)] flex flex-col bg-[#F2EDE8]">  {/* Main scroll 안되게 함 */}
-
-
+    <div className="min-h-[calc(100vh-52px)] flex flex-col bg-[#F2EDE8]">
+      {" "}
+      {/* Main scroll 안되게 함 */}
       {/* Main */}
       <main className="flex-1 flex items-center justify-center px-5 py-10">
         <div className="w-full max-w-[400px]">
           <div className="bg-white border border-[#000]/[0.07] rounded-[12px] px-9 py-16 shadow-sm">
-
             {/* Header */}
             <div className="text-center mb-8">
               <div className="w-[72px] h-[72px] rounded-[20px] overflow-hidden mx-auto mb-4]">
@@ -39,7 +35,8 @@ const SignIn = () => {
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
                     if (e.currentTarget.parentElement) {
-                      e.currentTarget.parentElement.style.background = "#F5A623";
+                      e.currentTarget.parentElement.style.background =
+                        "#F5A623";
                     }
                   }}
                 />
@@ -53,8 +50,11 @@ const SignIn = () => {
             </div>
 
             {/* Form */}
-            <form onSubmit={formik.handleSubmit} noValidate className="space-y-2">
-
+            <form
+              onSubmit={formik.handleSubmit}
+              noValidate
+              className="space-y-2"
+            >
               {/* Email */}
               <div className="space-y-1.5">
                 <Label
@@ -78,14 +78,12 @@ const SignIn = () => {
                       "pl-9 h-[46px] bg-[#F7F4F0] border-black/10",
                       formik.touched.email &&
                         formik.errors.email &&
-                        "border-red-500 focus-visible:border-red-500"
+                        "border-red-500 focus-visible:border-red-500",
                     )}
                   />
                 </div>
                 {formik.touched.email && formik.errors.email && (
-                  <p className="text-xs text-red-500">
-                    {formik.errors.email}
-                  </p>
+                  <p className="text-xs text-red-500">{formik.errors.email}</p>
                 )}
               </div>
 
@@ -112,14 +110,16 @@ const SignIn = () => {
                       "pl-9 pr-10 h-[46px] bg-[#F7F4F0] border-black/10",
                       formik.touched.password &&
                         formik.errors.password &&
-                        "border-red-500 focus-visible:border-red-500"
+                        "border-red-500 focus-visible:border-red-500",
                     )}
                   />
                   <button
                     type="button"
                     onClick={toggleShowPassword}
                     tabIndex={-1}
-                    aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
+                    aria-label={
+                      showPassword ? "비밀번호 숨기기" : "비밀번호 보기"
+                    }
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6B7280] hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? (
@@ -132,7 +132,10 @@ const SignIn = () => {
 
                 {formik.values.password && (
                   <>
-                    <StrengthBar score={passwordStrength} colors={strengthColors} />
+                    <StrengthBar
+                      score={passwordStrength}
+                      colors={strengthColors}
+                    />
                     {strengthLabel && (
                       <p className="text-xs text-[#6B7280] mt-1">
                         {strengthLabel}
@@ -143,7 +146,7 @@ const SignIn = () => {
 
                 {formik.touched.password && formik.errors.password && (
                   <p className="text-xs text-red-500">
-                     {formik.errors.password}
+                    {formik.errors.password}
                   </p>
                 )}
               </div>
@@ -174,11 +177,9 @@ const SignIn = () => {
                 {isLoading ? "로그인 중..." : "로그인하기"}
               </button>
             </form>
-
           </div>
         </div>
       </main>
-
       {/* Footer */}
       <footer className="text-center pb-5 text-xs text-gray-400">
         GAEMI Delivery Admin v2.1&nbsp;·&nbsp;관리자 전용&nbsp;·&nbsp;© 2026
