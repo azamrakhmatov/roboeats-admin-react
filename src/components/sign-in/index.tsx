@@ -3,28 +3,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import Navbar from "@/components/navbar";
 import { useSignInFeature } from "./feature";
+import StrengthBar from "./customs/strength-bar";
 
-const StrengthBar = ({
-  score,
-  colors,
-}: {
-  score: number;
-  colors: string[];
-}) => (
-  <div className="flex gap-1 mt-1.5">
-    {[0, 1, 2, 3].map((i) => (
-      <div
-        key={i}
-        className={cn(
-          "h-1 flex-1 rounded-full transition-all duration-300",
-          i < score ? colors[score - 1] : "bg-muted"
-        )}
-      />
-    ))}
-  </div>
-);
+
 
 const SignIn = () => {
   const {
@@ -38,7 +20,8 @@ const SignIn = () => {
   } = useSignInFeature();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F2EDE8]">
+    
+    <div className="min-h-[calc(100vh-52px)] flex flex-col bg-[#F2EDE8]">  {/* Main scroll 안되게 함 */}
 
 
       {/* Main */}
