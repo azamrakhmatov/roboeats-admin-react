@@ -19,10 +19,9 @@ export const useSignInFeature = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        // TODO: Replace with real API call
-        // const { data } = await axiosInstance.post("/auth/login", values);
+       
         await new Promise((r) => setTimeout(r, 1400));
-        toast.success("환영합니다! 👋 " + values.email);
+        toast.success("환영합니다!" + values.email);
         navigate("/");
       } catch {
         toast.error("이메일 또는 비밀번호를 확인해주세요.");
