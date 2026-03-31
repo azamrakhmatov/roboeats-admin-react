@@ -1,18 +1,16 @@
 import { Route, Routes } from "react-router-dom";
-
 import { authed_route, unauthed_route } from "./utils/routes";
 import { Toaster } from "@/components/ui/sonner";
-import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
+import { useAuth } from "@/hooks/useAuth";
 import Navbar from "./components/navbar";
 
-
 const App = () => {
-  const isAuthenticated = useIsAuthenticated();
+  const isAuthenticated = useAuth();
 
   return (
-
-    <div className="w-full"> 
-    <Navbar/>
+    <div className="w-full">
+      {isAuthenticated && <Navbar />}
+      
       <Toaster />
       <Routes>
         {(isAuthenticated ? authed_route : unauthed_route).map(
@@ -21,6 +19,7 @@ const App = () => {
           },
         )}
       </Routes>
+
     </div>
   );
 };

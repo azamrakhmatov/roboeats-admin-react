@@ -5,6 +5,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { useSignInFeature } from "./feature";
 import StrengthBar from "./customs/strength-bar";
+import Loading from "./loading";
+
+const LOGO_URL =
+  "https://play-lh.googleusercontent.com/4jX45qgQ3-roB3rstqPVzfiZYM01LGsX9MkveuIvGd0bk-6Cs2EBJi3tswKJsj-8Sw";
 
 const SignIn = () => {
   const {
@@ -17,28 +21,19 @@ const SignIn = () => {
     strengthColors,
   } = useSignInFeature();
 
+
   return (
-    <div className="min-h-[calc(100vh-52px)] flex flex-col bg-[#F2EDE8]">
-      {" "}
-      {/* Main scroll 안되게 함 */}
-      {/* Main */}
+    <div className="min-h-screen flex flex-col bg-[#F2EDE8]">
       <main className="flex-1 flex items-center justify-center px-5 py-10">
         <div className="w-full max-w-[400px]">
           <div className="bg-white border border-[#000]/[0.07] rounded-[12px] px-9 py-16 shadow-sm">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="w-[72px] h-[72px] rounded-[20px] overflow-hidden mx-auto mb-4]">
+              <div className="w-[72px] h-[72px] rounded-[20px] overflow-hidden mx-auto mb-4 bg-[#F5A623]">
                 <img
-                  src="https://play-lh.googleusercontent.com/4jX45qgQ3-roB3rstqPVzfiZYM01LGsX9MkveuIvGd0bk-6Cs2EBJi3tswKJsj-8Sw"
+                  src={LOGO_URL}
                   alt="GAEMI"
                   className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.style.display = "none";
-                    if (e.currentTarget.parentElement) {
-                      e.currentTarget.parentElement.style.background =
-                        "#F5A623";
-                    }
-                  }}
                 />
               </div>
               <h1 className="mt-4 text-xl font-semibold text-[#111827] mb-1">
@@ -64,7 +59,7 @@ const SignIn = () => {
                   이메일
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B7280] " />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B7280]" />
                   <Input
                     id="email"
                     name="email"
@@ -131,17 +126,11 @@ const SignIn = () => {
                 </div>
 
                 {formik.values.password && (
-                  <>
-                    <StrengthBar
-                      score={passwordStrength}
-                      colors={strengthColors}
-                    />
-                    {strengthLabel && (
-                      <p className="text-xs text-[#6B7280] mt-1">
-                        {strengthLabel}
-                      </p>
-                    )}
-                  </>
+                  <StrengthBar
+                    score={passwordStrength}
+                    colors={strengthColors}
+                    label={strengthLabel}
+                  />
                 )}
 
                 {formik.touched.password && formik.errors.password && (
@@ -180,10 +169,10 @@ const SignIn = () => {
           </div>
         </div>
       </main>
-      {/* Footer */}
-      <footer className="text-center pb-5 text-xs text-gray-400">
+
+      <div className="text-center pb-5 text-xs text-gray-400">
         GAEMI Delivery Admin v2.1&nbsp;·&nbsp;관리자 전용&nbsp;·&nbsp;© 2026
-      </footer>
+      </div>
     </div>
   );
 };

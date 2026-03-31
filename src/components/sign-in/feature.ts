@@ -1,15 +1,35 @@
 import { useFormik } from "formik";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { validationSchema, SignInSchemaType } from "@/models/validation/sign-in";
+import { signInWithEmailAndPassword, AuthError } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "@/firebase";
+import {
+  getPasswordStrength,
+  STRENGTH_LABELS,
+  STRENGTH_COLORS,
+} from "./customs/strength-bar/constants";
 
 const INITIAL_VALUES: SignInSchemaType = { email: "", password: "" };
+
+const AUTH_ERROR_MESSAGES: Record<string, string> = {
+  "auth/user-not-found": "이메일을 확인해주세요.",
+  "auth/wrong-password": "비밀번호를 확인해주세요.",
+  "auth/network-request-failed": "인터넷 연결을 확인해주세요.",
+  "auth/invalid-credential": "이메일 또는 비밀번호가 잘못 입력되었습니다.",
+};
+
+const DEFAULT_ERROR_MESSAGE = "이메일 또는 비밀번호가 잘못 입력되었습니다";
+
+const verifyAdminRole = async (email: string) => {
+  const userDoc = await getDoc(doc(db, "users", email));
+  return userDoc.data()?.auth === 1;
+};
 
 export const useSignInFeature = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   const formik = useFormik<SignInSchemaType>({
     initialValues: INITIAL_VALUES,
@@ -19,36 +39,30 @@ export const useSignInFeature = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        // TODO: Replace with real API call
-        // const { data } = await axiosInstance.post("/auth/login", values);
-        await new Promise((r) => setTimeout(r, 1400));
-        toast.success("환영합니다! 👋 " + values.email);
-        navigate("/");
-      } catch {
-        toast.error("이메일 또는 비밀번호를 확인해주세요.");
+        const { user } = await signInWithEmailAndPassword(
+          auth,
+          values.email,
+          values.password
+        );
+
+        const isAdmin = await verifyAdminRole(user.email || "");
+
+        if (isAdmin) {
+          toast.success("환영합니다!" + values.email);
+        } else {
+          toast.error("관리자 권한이 없습니다.");
+        }
+      } catch (error) {
+        const code = (error as AuthError).code;
+        toast.error(AUTH_ERROR_MESSAGES[code] ?? DEFAULT_ERROR_MESSAGE);
+        formik.setFieldValue("password", "");
       } finally {
         setIsLoading(false);
       }
     },
   });
 
-  const getPasswordStrength = (pw: string): number => {
-    let s = 0;
-    if (pw.length >= 6) s++;
-    if (pw.length >= 10) s++;
-    if (/[A-Z]/.test(pw) && /[0-9]/.test(pw)) s++;
-    if (/[^A-Za-z0-9]/.test(pw)) s++;
-    return s;
-  };
-
   const passwordStrength = getPasswordStrength(formik.values.password);
-  const strengthLabels = ["약함", "보통", "강함", "매우 강함"];
-  const strengthColors = [
-    "bg-red-500",
-    "bg-yellow-500",
-    "bg-orange-400",
-    "bg-emerald-500",
-  ];
 
   return {
     formik,
@@ -57,8 +71,8 @@ export const useSignInFeature = () => {
     isLoading,
     passwordStrength,
     strengthLabel: formik.values.password
-      ? (strengthLabels[passwordStrength - 1] ?? "")
+      ? (STRENGTH_LABELS[passwordStrength - 1] ?? "")
       : "",
-    strengthColors,
+    strengthColors: STRENGTH_COLORS,
   };
 };
