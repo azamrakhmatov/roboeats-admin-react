@@ -23,7 +23,7 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
 const DEFAULT_ERROR_MESSAGE = "이메일 또는 비밀번호가 잘못 입력되었습니다";
 
 const verifyAdminRole = async (email: string) => {
-  const userDoc = await getDoc(doc(db, "users", email));
+    const userDoc = await getDoc(doc(db, "users", email));
   return userDoc.data()?.auth === 1;
 };
 
